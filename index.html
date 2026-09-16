@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Food Trucks — Restaurant and Food Processing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Work+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F7EFDE;
+    --bg-alt: #FCF7EC;
+    --ink: #241F19;
+    --ink-soft: #55493B;
+    --truck: #201B15;
+    --truck-alt: #2B241C;
+    --mustard: #E0A22B;
+    --mustard-deep: #B7811E;
+    --chili: #C0432B;
+    --green: #66815089;
+    --green-solid: #5F7A47;
+    --line: rgba(36,31,25,0.16);
+    --line-strong: rgba(36,31,25,0.32);
+    --cream-on-dark: #F3E9D6;
+    --shadow: 0 10px 24px rgba(32,27,21,0.14);
+    --radius-ticket: 3px;
+    --font-display: 'Bebas Neue', Impact, 'Arial Narrow', sans-serif;
+    --font-body: 'Work Sans', 'Segoe UI', system-ui, sans-serif;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #17130F;
+      --bg-alt: #1E1911;
+      --ink: #F1E7D5;
+      --ink-soft: #C7BAA3;
+      --truck: #0F0C09;
+      --truck-alt: #191410;
+      --mustard: #EFB84C;
+      --mustard-deep: #D89A32;
+      --chili: #E0654A;
+      --green-solid: #82A163;
+      --line: rgba(241,231,213,0.18);
+      --line-strong: rgba(241,231,213,0.34);
+      --cream-on-dark: #F1E7D5;
+      --shadow: 0 10px 26px rgba(0,0,0,0.45);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #17130F;
+    --bg-alt: #1E1911;
+    --ink: #F1E7D5;
+    --ink-soft: #C7BAA3;
+    --truck: #0F0C09;
+    --truck-alt: #191410;
+    --mustard: #EFB84C;
+    --mustard-deep: #D89A32;
+    --chili: #E0654A;
+    --green-solid: #82A163;
+    --line: rgba(241,231,213,0.18);
+    --line-strong: rgba(241,231,213,0.34);
+    --cream-on-dark: #F1E7D5;
+    --shadow: 0 10px 26px rgba(0,0,0,0.45);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-body);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  img, svg { max-width: 100%; display: block; }
+
+  h1, h2, h3 { font-family: var(--font-display); font-weight: 400; letter-spacing: 0.01em; margin: 0; }
+  h2 { font-size: clamp(2rem, 4.5vw, 2.9rem); color: var(--ink); }
+  h3 { font-size: 1.5rem; }
+  p { margin: 0 0 1em; }
+  a { color: inherit; }
+
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 1.5rem; }
+
+  /* ---------- Nav ---------- */
+  nav.menu-board {
+    position: sticky; top: 0; z-index: 40;
+    background: var(--truck);
+    border-bottom: 3px solid var(--mustard);
+  }
+  nav.menu-board .wrap {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-top: 0.7rem; padding-bottom: 0.7rem; gap: 1rem; flex-wrap: wrap;
+  }
+  .brand {
+    font-family: var(--font-display);
+    color: var(--cream-on-dark);
+    font-size: 1.4rem;
+    letter-spacing: 0.02em;
+    display: flex; align-items: baseline; gap: 0.5rem;
+  }
+  .brand span { color: var(--mustard); }
+  .menu-links { display: flex; gap: 1.4rem; list-style: none; margin: 0; padding: 0; }
+  .menu-links a {
+    text-decoration: none; color: var(--cream-on-dark); opacity: 0.85;
+    font-size: 0.95rem; font-weight: 600; padding: 0.3rem 0.1rem;
+    border-bottom: 2px solid transparent; transition: border-color 0.15s ease, opacity 0.15s ease;
+  }
+  .menu-links a:hover, .menu-links a:focus-visible { opacity: 1; border-color: var(--mustard); }
+
+  /* ---------- Hero ---------- */
+  header.hero {
+    background: var(--truck);
+    color: var(--cream-on-dark);
+    padding: 4.5rem 0 3.5rem;
+    background-image:
+      radial-gradient(circle at 85% 20%, rgba(224,162,43,0.14), transparent 55%);
+  }
+  .hero-grid {
+    display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 3rem; align-items: center;
+  }
+  @media (max-width: 760px) { .hero-grid { grid-template-columns: 1fr; gap: 2rem; } }
+  .hero h1 {
+    font-size: clamp(3.2rem, 9vw, 5.6rem);
+    line-height: 0.95;
+    color: var(--cream-on-dark);
+  }
+  .hero .course-line {
+    font-family: var(--font-body); font-weight: 600; font-size: 0.95rem;
+    color: var(--mustard); margin-bottom: 0.9rem; letter-spacing: 0.01em;
+  }
+  .hero p.lede {
+    font-size: 1.15rem; color: var(--cream-on-dark); opacity: 0.92; max-width: 46ch;
+  }
+  .hero-nav-hint { font-size: 0.92rem; color: var(--cream-on-dark); opacity: 0.7; margin-top: 1.6rem; }
+
+  .truck-art { width: 100%; height: auto; }
+
+  /* ---------- Section shells ---------- */
+  section { padding: 4.2rem 0; }
+  section.alt { background: var(--bg-alt); }
+  .section-head { max-width: 62ch; margin-bottom: 2.4rem; }
+  .section-head p { color: var(--ink-soft); font-size: 1.08rem; }
+
+  /* ---------- Learn ---------- */
+  .learn-body { columns: 1; max-width: 68ch; }
+  .learn-body p { font-size: 1.05rem; }
+  .learn-body h3 { margin-top: 1.8rem; margin-bottom: 0.5rem; font-size: 1.4rem; color: var(--chili); }
+
+  .listen-btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: var(--truck); color: var(--cream-on-dark);
+    border: none; border-radius: 999px; padding: 0.55rem 1.1rem 0.55rem 0.9rem;
+    font-family: var(--font-body); font-weight: 700; font-size: 0.92rem;
+    cursor: pointer; margin-bottom: 1.6rem;
+  }
+  .listen-btn:hover, .listen-btn:focus-visible { background: var(--chili); }
+  .listen-btn .dot {
+    width: 8px; height: 8px; border-radius: 50%; background: var(--mustard);
+    display: inline-block;
+  }
+  .listen-btn.speaking .dot { background: var(--green-solid); animation: pulse 1s infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+  .listen-note { font-size: 0.82rem; color: var(--ink-soft); margin: -1.1rem 0 1.6rem; }
+
+  /* ---------- Quick check ---------- */
+  .check-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1.6rem; align-items: start;
+  }
+  @media (max-width: 800px) { .check-grid { grid-template-columns: 1fr; } }
+  .check-card {
+    background: var(--bg); border: 1px solid var(--line-strong); border-radius: var(--radius-ticket);
+    box-shadow: var(--shadow); padding: 1.5rem 1.5rem 1.6rem;
+  }
+  section.alt .check-card { background: var(--bg-alt); }
+  .check-card-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+  .check-score { font-family: var(--font-display); font-size: 1.15rem; color: var(--mustard-deep); white-space: nowrap; }
+  .check-instructions { color: var(--ink-soft); font-size: 0.92rem; margin: 0.4rem 0 1.2rem; }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: var(--truck); color: var(--cream-on-dark);
+    border: none; border-radius: 999px; padding: 0.55rem 1.1rem;
+    font-family: var(--font-body); font-weight: 700; font-size: 0.88rem; cursor: pointer;
+  }
+  .btn:hover, .btn:focus-visible { background: var(--chili); }
+  .btn.secondary {
+    background: transparent; color: var(--ink-soft); border: 1px solid var(--line-strong);
+  }
+  .btn.secondary:hover, .btn.secondary:focus-visible { background: var(--line); color: var(--ink); }
+  .check-actions { display: flex; gap: 0.7rem; margin-top: 1.3rem; flex-wrap: wrap; }
+
+  .spell-words { display: flex; flex-direction: column; gap: 1.1rem; }
+  .spell-word { display: flex; flex-wrap: wrap; align-items: center; gap: 0.9rem; }
+  .letters { display: flex; gap: 4px; flex-wrap: wrap; }
+  .letter-box {
+    width: 30px; height: 36px; border-radius: 3px; font-family: var(--font-display);
+    font-size: 1.05rem; text-transform: lowercase; text-align: center;
+  }
+  .letter-box.filled {
+    display: flex; align-items: center; justify-content: center;
+    background: var(--truck); color: var(--cream-on-dark);
+  }
+  input.letter-box.blank {
+    border: 2px solid var(--line-strong); background: var(--bg-alt); color: var(--ink); padding: 0;
+  }
+  section.alt input.letter-box.blank { background: var(--bg); }
+  input.letter-box.blank:focus { outline: none; border-color: var(--mustard-deep); }
+  input.letter-box.blank.correct { border-color: var(--green-solid); background: rgba(95,122,71,0.18); }
+  input.letter-box.blank.incorrect { border-color: var(--chili); background: rgba(192,67,43,0.14); }
+  .spell-hint { font-size: 0.86rem; color: var(--ink-soft); flex: 1 1 100%; }
+
+  .match-columns { display: flex; gap: 1rem; }
+  .match-col { flex: 1; display: flex; flex-direction: column; gap: 0.55rem; }
+  .chip {
+    padding: 0.6rem 0.8rem; border: 1px solid var(--line-strong); border-radius: var(--radius-ticket);
+    cursor: pointer; font-size: 0.88rem; background: var(--bg-alt); transition: border-color 0.15s ease, transform 0.1s ease;
+  }
+  section.alt .chip { background: var(--bg); }
+  .chip.word { font-weight: 700; color: var(--chili); font-size: 0.92rem; }
+  .chip.selected { border-color: var(--mustard-deep); box-shadow: 0 0 0 2px var(--mustard-deep) inset; }
+  .chip.matched { background: var(--green-solid); color: var(--cream-on-dark); border-color: var(--green-solid); cursor: default; }
+  .chip.wrong { animation: chip-shake 0.3s ease; border-color: var(--chili); }
+  @keyframes chip-shake { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+
+  .glossary {
+    border-bottom: 2px dotted var(--chili);
+    cursor: help;
+    position: relative;
+  }
+  .glossary::after {
+    content: attr(data-def);
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 8px);
+    transform: translateX(-50%) translateY(4px);
+    width: max-content;
+    max-width: 240px;
+    background: var(--truck);
+    color: var(--cream-on-dark);
+    font-size: 0.82rem;
+    font-weight: 500;
+    line-height: 1.4;
+    padding: 0.5rem 0.7rem;
+    border-radius: var(--radius-ticket);
+    box-shadow: var(--shadow);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    z-index: 20;
+  }
+  .glossary:hover::after, .glossary:focus::after { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .fact-strip {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
+    background: var(--line); border: 1px solid var(--line); margin: 2.4rem 0;
+  }
+  @media (max-width: 700px) { .fact-strip { grid-template-columns: 1fr; } }
+  .fact-strip .fact { background: var(--bg-alt); padding: 1.4rem 1.3rem; }
+  section:not(.alt) .fact-strip .fact { background: var(--bg); }
+  .fact h4 {
+    font-family: var(--font-display); font-size: 1.2rem; margin: 0 0 0.35rem;
+    color: var(--mustard-deep);
+  }
+  .fact p { margin: 0; font-size: 0.95rem; color: var(--ink-soft); }
+
+  /* ---------- Vocabulary ---------- */
+  .vocab-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem;
+  }
+  .flip-card { perspective: 1000px; height: 150px; cursor: pointer; }
+  .flip-card-inner {
+    position: relative; width: 100%; height: 100%; text-align: left;
+    transition: transform 0.5s cubic-bezier(0.4,0.2,0.2,1); transform-style: preserve-3d;
+  }
+  .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+  .flip-face {
+    position: absolute; inset: 0; backface-visibility: hidden;
+    border: 1px solid var(--line-strong); border-radius: var(--radius-ticket);
+    padding: 1rem 1.1rem; display: flex; flex-direction: column; justify-content: center;
+    box-shadow: var(--shadow);
+  }
+  .flip-front { background: var(--bg-alt); }
+  section.alt .flip-front { background: var(--bg); }
+  .flip-front .term { font-family: var(--font-display); font-size: 1.3rem; color: var(--chili); }
+  .flip-front .tap-hint { font-size: 0.78rem; color: var(--ink-soft); margin-top: 0.4rem; }
+  .flip-back {
+    background: var(--truck); color: var(--cream-on-dark);
+    transform: rotateY(180deg); font-size: 0.92rem;
+  }
+  .flip-back .term-back { font-family: var(--font-display); font-size: 1rem; color: var(--mustard); margin-bottom: 0.3rem; }
+
+  /* ---------- Tasks / tickets ---------- */
+  .ticket-progress {
+    display: flex; align-items: center; gap: 0.8rem; margin-bottom: 2.2rem;
+    font-size: 0.95rem; color: var(--ink-soft);
+  }
+  .ticket-progress .bar {
+    flex: 1; height: 8px; background: var(--line); border-radius: 999px; overflow: hidden;
+  }
+  .ticket-progress .bar-fill {
+    height: 100%; width: 0%; background: var(--green-solid);
+    transition: width 0.35s ease;
+  }
+  .tickets { display: flex; flex-direction: column; gap: 1.1rem; }
+  .ticket {
+    position: relative;
+    background: var(--bg-alt);
+    border: 1px solid var(--line-strong);
+    border-left: 6px solid var(--mustard);
+    border-radius: var(--radius-ticket);
+    box-shadow: var(--shadow);
+    padding: 1.3rem 1.4rem 1.3rem 1.3rem;
+    transition: border-left-color 0.2s ease;
+  }
+  section:not(.alt) .ticket { background: var(--bg); }
+  .ticket.done { border-left-color: var(--green-solid); }
+  .ticket-top { display: flex; align-items: flex-start; gap: 1rem; }
+  .ticket-num {
+    font-family: var(--font-display); font-size: 2.1rem; color: var(--mustard-deep);
+    line-height: 1; min-width: 2.4ch;
+  }
+  .ticket.done .ticket-num { color: var(--green-solid); }
+  .ticket-head { flex: 1; }
+  .ticket-head h3 { margin-bottom: 0.15rem; }
+  .ticket-type { font-size: 0.85rem; color: var(--ink-soft); font-weight: 600; }
+  .ticket-brief { margin: 0.6rem 0 0; color: var(--ink-soft); font-size: 0.98rem; }
+
+  .ticket-check {
+    display: flex; align-items: center; gap: 0.5rem;
+    font-size: 0.85rem; font-weight: 600; color: var(--ink-soft);
+    cursor: pointer; white-space: nowrap; user-select: none;
+    border: 1px solid var(--line-strong); border-radius: 999px; padding: 0.35rem 0.7rem 0.35rem 0.5rem;
+    background: transparent;
+  }
+  .ticket-check input { accent-color: var(--green-solid); width: 15px; height: 15px; }
+  .ticket.done .ticket-check { border-color: var(--green-solid); color: var(--green-solid); }
+
+  details.ticket-details { margin-top: 0.9rem; }
+  details.ticket-details summary {
+    list-style: none; cursor: pointer; font-weight: 700; font-size: 0.92rem;
+    color: var(--chili); display: inline-flex; align-items: center; gap: 0.4rem;
+  }
+  details.ticket-details summary::-webkit-details-marker { display: none; }
+  details.ticket-details summary::after { content: "Show instructions"; }
+  details.ticket-details[open] summary::after { content: "Hide instructions"; }
+  details.ticket-details summary .icon { font-family: var(--font-display); font-size: 1.1rem; }
+  details.ticket-details summary .icon::before { content: "+"; }
+  details.ticket-details[open] summary .icon::before { content: "−"; }
+  .ticket-instructions {
+    margin-top: 0.8rem; padding-top: 0.8rem; border-top: 1px dashed var(--line-strong);
+    font-size: 0.97rem; color: var(--ink);
+  }
+  .ticket-instructions ul { margin: 0; padding-left: 1.2rem; }
+  .ticket-instructions li { margin-bottom: 0.45rem; }
+  .ticket-instructions .note {
+    margin-top: 0.7rem; font-size: 0.88rem; color: var(--ink-soft); font-style: italic;
+  }
+  .scenario-box {
+    background: var(--truck); color: var(--cream-on-dark); border-radius: var(--radius-ticket);
+    padding: 0.8rem 1rem; margin: 0.7rem 0; font-size: 0.93rem;
+  }
+  .scenario-box p { margin: 0 0 0.4rem; }
+  .scenario-box p:last-child { margin-bottom: 0; }
+
+  /* ---------- Footer ---------- */
+  footer {
+    background: var(--truck); color: var(--cream-on-dark); padding: 2.4rem 0; text-align: center;
+    font-size: 1rem; opacity: 0.85;
+  }
+  footer .wrap { display: flex; flex-direction: column; gap: 0.3rem; }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; scroll-behavior: auto !important; }
+  }
+
+  :focus-visible { outline: 2px solid var(--chili); outline-offset: 2px; }
+</style>
+</head>
+<body>
+
+<nav class="menu-board">
+  <div class="wrap">
+    <div class="brand">Food<span>Trucks</span></div>
+    <ul class="menu-links">
+      <li><a href="#learn">Learn</a></li>
+      <li><a href="#check">Quick Check</a></li>
+      <li><a href="#vocab">Word List</a></li>
+      <li><a href="#tasks">Tasks</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <p class="course-line">Restaurant and Food Processing · Vg1</p>
+      <h1>Food Trucks</h1>
+      <p class="lede">A small kitchen on wheels, a short menu, and a line of hungry customers. This page introduces you to one of the fastest-growing corners of the restaurant world, then gives you seven jobs to prove you understand it.</p>
+      <p class="hero-nav-hint">Start with the reading below, learn the key words, then work through the order tickets.</p>
+    </div>
+    <svg class="truck-art" viewBox="0 0 420 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Simple illustration of a food truck with a serving window">
+      <rect x="10" y="70" width="260" height="110" rx="6" fill="#2B241C" stroke="#E0A22B" stroke-width="3"/>
+      <rect x="270" y="100" width="90" height="80" rx="6" fill="#2B241C" stroke="#E0A22B" stroke-width="3"/>
+      <rect x="30" y="90" width="150" height="55" rx="3" fill="#E0A22B"/>
+      <rect x="45" y="100" width="120" height="35" fill="#17130F"/>
+      <rect x="45" y="100" width="120" height="10" fill="#C0432B"/>
+      <line x1="65" y1="145" x2="65" y2="90" stroke="#17130F" stroke-width="4"/>
+      <line x1="65" y1="90" x2="45" y2="100" stroke="#17130F" stroke-width="4"/>
+      <rect x="195" y="90" width="55" height="40" rx="3" fill="#F3E9D6" opacity="0.9"/>
+      <rect x="290" y="115" width="50" height="35" rx="3" fill="#F3E9D6" opacity="0.85"/>
+      <rect x="10" y="70" width="260" height="14" fill="#C0432B"/>
+      <circle cx="90" cy="195" r="26" fill="#17130F"/>
+      <circle cx="90" cy="195" r="10" fill="#E0A22B"/>
+      <circle cx="230" cy="195" r="26" fill="#17130F"/>
+      <circle cx="230" cy="195" r="10" fill="#E0A22B"/>
+      <circle cx="330" cy="195" r="22" fill="#17130F"/>
+      <circle cx="330" cy="195" r="9" fill="#E0A22B"/>
+      <rect x="60" y="60" width="18" height="14" fill="#5F7A47"/>
+      <rect x="85" y="55" width="14" height="19" fill="#5F7A47"/>
+      <rect x="105" y="60" width="16" height="14" fill="#5F7A47"/>
+    </svg>
+  </div>
+</header>
+
+<section id="learn">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>What is a food truck, really?</h2>
+      <p>Before you take your first order, read this short introduction to the food truck business.</p>
+    </div>
+    <button class="listen-btn" id="listenBtn" type="button">
+      <span class="dot"></span>
+      <span id="listenBtnLabel">Listen to this text</span>
+    </button>
+    <p class="listen-note">Uses your browser's built-in English voice. Underlined words show a definition if you hover or tab onto them.</p>
+    <div class="learn-body" id="learnBody">
+      <p>A food truck is a <span class="glossary" tabindex="0" data-def="A small, movable kitchen for cooking and selling food.">mobile kitchen</span>: a vehicle or <span class="glossary" tabindex="0" data-def="A vehicle with no engine of its own, pulled behind a car or truck.">trailer</span> fitted out with cooking equipment, storage, and a serving window, that sells food directly to customers on the street, at events, or outside offices and schools. The idea is old. Chuck wagons fed cowboys on cattle drives in the 1800s, and ice cream vans have circled neighbourhoods for generations. But the modern <span class="glossary" tabindex="0" data-def="Food of very high quality, prepared and presented with extra care.">gourmet</span> food truck, the kind serving restaurant-quality food from a small window, is often <span class="glossary" tabindex="0" data-def="Followed back in time to find where something started.">traced</span> back to trucks like Kogi BBQ in Los Angeles around 2008. Since then, the trend has spread to cities across the world, including here in Norway.</p>
+
+      <h3>Why the business model works</h3>
+      <p>Starting a food truck usually costs far less than opening a restaurant. There is no long <span class="glossary" tabindex="0" data-def="A contract to rent a building for a fixed period of time.">lease</span> to sign, no large dining room to furnish, and no big staff to pay before a single dish is sold. A truck can also move to where the customers are: a business park at lunchtime, a festival on the weekend, a football match on a Saturday. For a young chef or <span class="glossary" tabindex="0" data-def="A person who starts and runs their own business.">entrepreneur</span>, a truck is often the cheapest way to test a menu idea and build a following before <span class="glossary" tabindex="0" data-def="Deciding firmly to do something, even though it is a big step.">committing</span> to something bigger.</p>
+
+      <h3>Why it is also hard work</h3>
+      <p>A tiny kitchen means a short menu, careful planning, and almost no room for mistakes. Owners need permits to park and trade, must follow the same food safety rules as any restaurant, and depend heavily on weather, events, and word of mouth. Equipment failures, like a broken <span class="glossary" tabindex="0" data-def="A machine that makes electricity, often used when there is no power supply nearby.">generator</span> or a fridge that stops cooling, can end a day of trading in minutes. Many successful truck owners say the job is less about cooking and more about <span class="glossary" tabindex="0" data-def="The planning needed to get people, food, and equipment to the right place at the right time.">logistics</span>: knowing exactly where to be, when, and with how much food prepared in advance.</p>
+
+      <h3>Where your skills fit in</h3>
+      <p>Everything you learn in restaurant and food processing studies applies here, just in a smaller space. A food truck still needs a planned menu, correct portioning, accurate costing, safe food handling, and good service at the window. If anything, the smaller scale makes those skills more <span class="glossary" tabindex="0" data-def="Easy to see or notice.">visible</span>: there is nowhere to hide a mistake when your whole kitchen is four square metres.</p>
+    </div>
+
+    <div class="fact-strip">
+      <div class="fact">
+        <h4>Low entry cost</h4>
+        <p>A truck typically costs much less to set up than a full restaurant, which is why many first-time owners start here.</p>
+      </div>
+      <div class="fact">
+        <h4>Mobile by design</h4>
+        <p>Trucks follow the customers: lunch crowds on weekdays, festivals and markets on weekends.</p>
+      </div>
+      <div class="fact">
+        <h4>Same rules, smaller space</h4>
+        <p>Food safety, hygiene, and portion control still apply in full, even in a kitchen the size of a closet.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="check" class="alt">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Quick check</h2>
+      <p>Two fast games using words from the reading. Your score updates as you play.</p>
+    </div>
+    <div class="check-grid">
+      <div class="check-card">
+        <div class="check-card-head">
+          <h3>Missing letters</h3>
+          <div class="check-score">Score: <span id="spellScore">0 / 8</span></div>
+        </div>
+        <p class="check-instructions">Fill in the missing letters, then check your spelling.</p>
+        <div id="spellWords" class="spell-words"></div>
+        <div class="check-actions">
+          <button class="btn" id="checkSpelling" type="button">Check spelling</button>
+          <button class="btn secondary" id="resetSpelling" type="button">Try again</button>
+        </div>
+      </div>
+
+      <div class="check-card">
+        <div class="check-card-head">
+          <h3>Match it up</h3>
+          <div class="check-score">Score: <span id="matchScore">0 / 8</span></div>
+        </div>
+        <p class="check-instructions">Click a word, then click its definition. Matched pairs turn green.</p>
+        <div class="match-columns">
+          <div id="matchWordsCol" class="match-col"></div>
+          <div id="matchDefsCol" class="match-col"></div>
+        </div>
+        <div class="check-actions">
+          <button class="btn secondary" id="resetMatch" type="button">Shuffle again</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="vocab">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Word list</h2>
+      <p>Tap a card to see what each term means. You will need these words for the tasks below.</p>
+    </div>
+    <div class="vocab-grid" id="vocabGrid"></div>
+  </div>
+</section>
+
+<section id="tasks" class="alt">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Your tasks</h2>
+      <p>Seven order tickets that build toward one thing: standing up and presenting your own food truck. Tick a ticket off once it is done.</p>
+    </div>
+
+    <div class="ticket-progress">
+      <span id="progressLabel">0 of 7 tickets done</span>
+      <div class="bar"><div class="bar-fill" id="progressBar"></div></div>
+    </div>
+
+    <div class="tickets" id="ticketsWrap"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>Restaurant and Food Processing · Vg1 · Nannestad High School · <span style="white-space: nowrap;">Barbara Anna Zielonka</span></p>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var btn = document.getElementById('listenBtn');
+    var label = document.getElementById('listenBtnLabel');
+    var body = document.getElementById('learnBody');
+    if (!btn || !body) return;
+
+    if (!('speechSynthesis' in window)) {
+      btn.style.display = 'none';
+      return;
+    }
+
+    var speaking = false;
+
+    function pickVoice() {
+      var voices = window.speechSynthesis.getVoices();
+      var preferred = voices.find(function (v) { return /en-GB/i.test(v.lang); });
+      if (!preferred) preferred = voices.find(function (v) { return /en-US/i.test(v.lang); });
+      if (!preferred) preferred = voices.find(function (v) { return /^en/i.test(v.lang); });
+      return preferred || null;
+    }
+
+    function stop() {
+      window.speechSynthesis.cancel();
+      speaking = false;
+      btn.classList.remove('speaking');
+      label.textContent = 'Listen to this text';
+    }
+
+    btn.addEventListener('click', function () {
+      if (speaking) { stop(); return; }
+      var text = body.innerText || body.textContent;
+      var utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'en-GB';
+      var voice = pickVoice();
+      if (voice) utterance.lang = voice.lang;
+      if (voice) utterance.voice = voice;
+      utterance.rate = 0.95;
+      utterance.onend = stop;
+      utterance.onerror = stop;
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(utterance);
+      speaking = true;
+      btn.classList.add('speaking');
+      label.textContent = 'Stop reading';
+    });
+
+    if (window.speechSynthesis.onvoiceschanged !== undefined) {
+      window.speechSynthesis.onvoiceschanged = function () {};
+    }
+  })();
+
+  (function () {
+    var spellWords = [
+      { word: "trailer", hint: "pulled behind a car or truck" },
+      { word: "gourmet", hint: "high quality, prepared with extra care" },
+      { word: "lease", hint: "a contract to rent a building" },
+      { word: "entrepreneur", hint: "starts and runs their own business" },
+      { word: "generator", hint: "a machine that makes electricity" },
+      { word: "logistics", hint: "planning to get things to the right place" },
+      { word: "visible", hint: "easy to see" },
+      { word: "traced", hint: "followed back to find the start" }
+    ];
+
+    var spellWrap = document.getElementById('spellWords');
+    spellWords.forEach(function (item, wIdx) {
+      var word = item.word;
+      var row = document.createElement('div');
+      row.className = 'spell-word';
+      var letters = document.createElement('div');
+      letters.className = 'letters';
+      for (var i = 0; i < word.length; i++) {
+        var isEdge = (i === 0 || i === word.length - 1);
+        var show = isEdge || (i % 2 === 0);
+        if (show) {
+          var span = document.createElement('span');
+          span.className = 'letter-box filled';
+          span.textContent = word[i];
+          letters.appendChild(span);
+        } else {
+          var inp = document.createElement('input');
+          inp.className = 'letter-box blank';
+          inp.maxLength = 1;
+          inp.setAttribute('data-answer', word[i]);
+          inp.setAttribute('data-word', String(wIdx));
+          inp.setAttribute('aria-label', 'Missing letter in ' + word);
+          letters.appendChild(inp);
+        }
+      }
+      var hint = document.createElement('div');
+      hint.className = 'spell-hint';
+      hint.textContent = item.hint;
+      row.appendChild(letters);
+      row.appendChild(hint);
+      spellWrap.appendChild(row);
+    });
+
+    document.getElementById('checkSpelling').addEventListener('click', function () {
+      var wordsCorrect = 0;
+      spellWords.forEach(function (item, wIdx) {
+        var inputs = spellWrap.querySelectorAll('input[data-word="' + wIdx + '"]');
+        var allCorrect = true;
+        inputs.forEach(function (inp) {
+          var val = (inp.value || '').toLowerCase();
+          var ans = inp.getAttribute('data-answer');
+          if (val === ans) {
+            inp.classList.remove('incorrect');
+            inp.classList.add('correct');
+          } else {
+            inp.classList.remove('correct');
+            inp.classList.add('incorrect');
+            allCorrect = false;
+          }
+        });
+        if (allCorrect) wordsCorrect++;
+      });
+      document.getElementById('spellScore').textContent = wordsCorrect + ' / ' + spellWords.length;
+    });
+
+    document.getElementById('resetSpelling').addEventListener('click', function () {
+      spellWrap.querySelectorAll('input').forEach(function (inp) {
+        inp.value = '';
+        inp.classList.remove('correct', 'incorrect');
+      });
+      document.getElementById('spellScore').textContent = '0 / ' + spellWords.length;
+    });
+  })();
+
+  (function () {
+    var matchData = [
+      { word: "Trailer", def: "A vehicle with no engine of its own, pulled behind a car or truck." },
+      { word: "Gourmet", def: "Food of very high quality, prepared and presented with extra care." },
+      { word: "Lease", def: "A contract to rent a building for a fixed period of time." },
+      { word: "Entrepreneur", def: "A person who starts and runs their own business." },
+      { word: "Generator", def: "A machine that makes electricity, often used with no power supply nearby." },
+      { word: "Logistics", def: "The planning needed to get things to the right place at the right time." },
+      { word: "Visible", def: "Easy to see or notice." },
+      { word: "Traced", def: "Followed back in time to find where something started." }
+    ];
+
+    var wordsCol = document.getElementById('matchWordsCol');
+    var defsCol = document.getElementById('matchDefsCol');
+    var scoreEl = document.getElementById('matchScore');
+    var selected = null;
+    var matchedCount = 0;
+
+    function shuffled(arr) {
+      var copy = arr.slice();
+      for (var i = copy.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = copy[i]; copy[i] = copy[j]; copy[j] = tmp;
+      }
+      return copy;
+    }
+
+    function clearSelection() {
+      if (selected) selected.el.classList.remove('selected');
+      selected = null;
+    }
+
+    function onChipClick(el, key, type) {
+      if (el.classList.contains('matched')) return;
+      if (!selected) {
+        selected = { el: el, key: key, type: type };
+        el.classList.add('selected');
+        return;
+      }
+      if (selected.type === type) {
+        clearSelection();
+        selected = { el: el, key: key, type: type };
+        el.classList.add('selected');
+        return;
+      }
+      if (selected.key === key) {
+        selected.el.classList.remove('selected');
+        selected.el.classList.add('matched');
+        el.classList.add('matched');
+        matchedCount++;
+        scoreEl.textContent = matchedCount + ' / ' + matchData.length;
+        selected = null;
+      } else {
+        var wrongEls = [selected.el, el];
+        wrongEls.forEach(function (w) { w.classList.add('wrong'); });
+        setTimeout(function () {
+          wrongEls.forEach(function (w) { w.classList.remove('wrong'); });
+        }, 300);
+        clearSelection();
+      }
+    }
+
+    function build() {
+      wordsCol.innerHTML = '';
+      defsCol.innerHTML = '';
+      selected = null;
+      matchedCount = 0;
+      scoreEl.textContent = '0 / ' + matchData.length;
+
+      shuffled(matchData).forEach(function (item) {
+        var chip = document.createElement('div');
+        chip.className = 'chip word';
+        chip.textContent = item.word;
+        chip.setAttribute('tabindex', '0');
+        chip.addEventListener('click', function () { onChipClick(chip, item.word, 'word'); });
+        wordsCol.appendChild(chip);
+      });
+
+      shuffled(matchData).forEach(function (item) {
+        var chip = document.createElement('div');
+        chip.className = 'chip def';
+        chip.textContent = item.def;
+        chip.setAttribute('tabindex', '0');
+        chip.addEventListener('click', function () { onChipClick(chip, item.word, 'def'); });
+        defsCol.appendChild(chip);
+      });
+    }
+
+    build();
+    document.getElementById('resetMatch').addEventListener('click', build);
+  })();
+
+  var vocab = [
+    { term: "Concession window", def: "The serving hatch where customers place their order and collect their food." },
+    { term: "Commissary kitchen", def: "A licensed kitchen away from the truck where owners can prep and store food legally." },
+    { term: "Food cost percentage", def: "The cost of ingredients in a dish, shown as a percentage of the price the customer pays." },
+    { term: "Prep station", def: "The area where ingredients are washed, cut, and made ready before cooking starts." },
+    { term: "Signature dish", def: "The one item a truck is best known for, often what brings customers back." },
+    { term: "Permit", def: "Official written permission from local authorities to trade food in a certain place." },
+    { term: "Queue", def: "The line of customers waiting to order or collect food." },
+    { term: "Overhead", def: "The ongoing costs of running the business, such as fuel, insurance, and parking fees." },
+    { term: "Turnover (service)", def: "How quickly customers are served, from ordering to receiving their food." },
+    { term: "Portion control", def: "Serving the same amount of food every time, so cost and quality stay consistent." },
+    { term: "Menu board", def: "The sign, often a chalkboard, listing the food items and their prices." },
+    { term: "Health inspection", def: "An official visit that checks hygiene and food safety standards are being followed." }
+  ];
+
+  var vocabGrid = document.getElementById('vocabGrid');
+  vocab.forEach(function (v) {
+    var card = document.createElement('div');
+    card.className = 'flip-card';
+    card.setAttribute('role', 'button');
+    card.setAttribute('tabindex', '0');
+    card.setAttribute('aria-label', 'Flip card: ' + v.term);
+    card.innerHTML =
+      '<div class="flip-card-inner">' +
+        '<div class="flip-face flip-front"><div class="term">' + v.term + '</div><div class="tap-hint">Tap to see meaning</div></div>' +
+        '<div class="flip-face flip-back"><div class="term-back">' + v.term + '</div><div>' + v.def + '</div></div>' +
+      '</div>';
+    function toggle() { card.classList.toggle('flipped'); }
+    card.addEventListener('click', toggle);
+    card.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } });
+    vocabGrid.appendChild(card);
+  });
+
+  var tasks = [
+    {
+      title: "Origin story",
+      type: "Research — individual, presentation prep",
+      brief: "Find one real food truck and pick up ideas you can mention when you introduce your own.",
+      instructions: [
+        "Find one real food truck online, on social media, or one you know in person.",
+        "Note down, in a few words each: its name, where it works, 2 to 3 menu items, its price range.",
+        "Note down one reason you think it works. A phrase is enough, no full sentences needed.",
+        "Keep these notes, you will use them when you present."
+      ]
+    },
+    {
+      title: "Build your truck",
+      type: "Concept & branding — individual, presentation prep",
+      brief: "Sketch out the truck you will present to the class.",
+      instructions: [
+        "Choose a name for your truck.",
+        "Choose one target customer group: students, office workers, festival visitors, or families.",
+        "List 5 menu items with a price in NOK next to each. Names and prices only, no descriptions.",
+        "Note 3 words that describe the look and feel of your truck."
+      ]
+    },
+    {
+      title: "Cost it out",
+      type: "Quick maths — individual, presentation prep",
+      brief: "Work out the price of one dish so you can explain it when you present.",
+      instructions: [
+        "Pick one dish from Ticket 2 and list its ingredients with rough costs.",
+        "Add up the total ingredient cost for one portion.",
+        "Use a target food cost of around 30% to work out a selling price.",
+        "Keep this as numbers on paper, you will explain it out loud, not in writing."
+      ],
+      note: "The 28–35% range is a common industry guideline, not a fixed rule."
+    },
+    {
+      title: "Order up",
+      type: "Spoken practice — pairs",
+      brief: "Practise taking an order at the window, out loud, with a partner.",
+      instructions: [
+        "With a partner, act out: a customer orders, asks a question about an allergy or an ingredient, and the worker answers.",
+        "No script needed. A few cue words on paper are enough if you want them.",
+        "Swap roles and try it a second time."
+      ]
+    },
+    {
+      title: "Safety check",
+      type: "Spoken scenario — pairs or small group",
+      brief: "Spot what is wrong in the truck below, then explain it out loud.",
+      instructions: [
+        "Look at the three situations below.",
+        "Say out loud what is wrong in each one, and how you would fix it.",
+        "Use words from the word list where you can."
+      ],
+      scenario: [
+        "Situation A: Raw chicken and salad vegetables are stored on the same shelf in the fridge.",
+        "Situation B: A worker handles cash, then goes straight back to plating food without washing their hands.",
+        "Situation C: The truck has no thermometer to check that hot food is being kept at a safe temperature."
+      ]
+    },
+    {
+      title: "Pitch it",
+      type: "Oral pitch — individual, presentation prep",
+      brief: "Prepare a short spoken pitch for your truck, 30 to 45 seconds.",
+      instructions: [
+        "Prepare a small cue card, not a full script, covering: your truck's name, your signature dish, one reason to visit, and where to find you.",
+        "Practise saying it out loud, at least twice, before you present.",
+        "End with a clear call to action, for example: \"Find us by the main stage from 12 to 6.\""
+      ]
+    },
+    {
+      title: "Present your truck",
+      type: "Oral presentation — individual, in front of the class or a small group",
+      brief: "Bring it all together and present your food truck out loud.",
+      instructions: [
+        "Speak for about 2 to 3 minutes using your notes from Tickets 1 to 6, small cue cards only, no full script.",
+        "Cover: what inspired you, your truck's name and concept, your menu and one price, and your pitch.",
+        "Be ready for one or two questions from the class afterwards."
+      ]
+    }
+  ];
+
+  var ticketsWrap = document.getElementById('ticketsWrap');
+  var doneCount = 0;
+
+  function updateProgress() {
+    document.getElementById('progressLabel').textContent = doneCount + ' of ' + tasks.length + ' tickets done';
+    document.getElementById('progressBar').style.width = (doneCount / tasks.length * 100) + '%';
+  }
+
+  tasks.forEach(function (t, i) {
+    var el = document.createElement('article');
+    el.className = 'ticket';
+
+    var instrHtml = '<ul>' + t.instructions.map(function (s) { return '<li>' + s + '</li>'; }).join('') + '</ul>';
+    if (t.note) instrHtml += '<p class="note">' + t.note + '</p>';
+    if (t.scenario) {
+      instrHtml += '<div class="scenario-box">' + t.scenario.map(function (s) { return '<p>' + s + '</p>'; }).join('') + '</div>';
+    }
+
+    el.innerHTML =
+      '<div class="ticket-top">' +
+        '<div class="ticket-num">' + String(i + 1).padStart(2, '0') + '</div>' +
+        '<div class="ticket-head">' +
+          '<h3>' + t.title + '</h3>' +
+          '<div class="ticket-type">' + t.type + '</div>' +
+          '<p class="ticket-brief">' + t.brief + '</p>' +
+        '</div>' +
+        '<label class="ticket-check">' +
+          '<input type="checkbox" aria-label="Mark ticket ' + (i + 1) + ' as done">' +
+          '<span>Done</span>' +
+        '</label>' +
+      '</div>' +
+      '<details class="ticket-details">' +
+        '<summary><span class="icon"></span></summary>' +
+        '<div class="ticket-instructions">' + instrHtml + '</div>' +
+      '</details>';
+
+    var checkbox = el.querySelector('input[type="checkbox"]');
+    checkbox.addEventListener('change', function () {
+      el.classList.toggle('done', checkbox.checked);
+      doneCount += checkbox.checked ? 1 : -1;
+      updateProgress();
+    });
+
+    ticketsWrap.appendChild(el);
+  });
+
+  updateProgress();
+</script>
+
+</body>
+</html>
